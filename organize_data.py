@@ -59,16 +59,6 @@ def process_jsonls(filenames):
         json.dump(test_data, file_out, ensure_ascii=False)
 
 
-def create_dataloader(partition):
-    '''
-    Creates pytorch dataloader
-    
-    :partition: poriton of data to be put in dataloader; has to be 'train', 'val' or 'test'
-    '''
-    assert partition in ['train', 'val', 'test']
-    pass
-
-
 if __name__ == '__main__':
     files = get_files()
     print(f'Dataset files found: {files}')

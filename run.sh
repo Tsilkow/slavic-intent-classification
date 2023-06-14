@@ -8,9 +8,8 @@ dataset_version='1.0'
 
 
 download_dataset () {
-    if ! [ -d $dataset_dir ] || ! [ -f $dataset_dir/$dataset_filename ]
+    if ! [ -f $dataset_dir/$dataset_filename ]
     then
-	mkdir $dataset_dir
 	curl $dataset_url$dataset_filename -o $dataset_dir$dataset_filename
     fi
     cd $dataset_dir
@@ -23,5 +22,9 @@ download_dataset () {
 }
 
 
-download_dataset pl-PL
-python organize_data.py
+if ! [ -f $data_dir/'train.json' ] || ! [ -f $data_dir/'val.json' ] || ! [ -f $data_dir/'test.json' ]
+then
+    download_dataset pl-PL
+    python organize_data.py
+fi
+
