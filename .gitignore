@@ -1,0 +1,7 @@
+dataset/*
+!dataset/.gitkeep
+data/*
+!data/.gitkeep
+__pycache__/
+venv/
+\#*
