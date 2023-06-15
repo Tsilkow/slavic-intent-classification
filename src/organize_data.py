@@ -1,7 +1,6 @@
 import os
 import simplejson as json
 import numpy as np
-import torch
 
 
 pad_token = '#'
@@ -21,14 +20,14 @@ def get_files():
     return result
 
 
-def save_data_to_file(filename, data):
+def save_data_to_file(filename, data, flat=False):
     """
     Helper function for saving given data to file, each item to a new line.
     """
     with open(os.path.join(data_dir, filename), 'w', encoding='utf8') as file_out:
-        print(f'{len(data)} entries in {filename}')
-        for entry in data:
-            file_out.write(f'{entry}\n')
+        entries_total = len(data) if flat else len(data['x'])
+        print(f'{entries_total} entries in {filename}')
+        json.dump(data, file_out, ensure_ascii=False)
 
 
 def process_jsonls(filenames):
@@ -38,15 +37,11 @@ def process_jsonls(filenames):
 
     :filenames: list of filenames (full paths) of jsonls to process
     """
-    saved_labels=False
     for filename in filenames:
         input_parse = []
-        train_data_x = []
-        train_data_y = []
-        val_data_x = []
-        val_data_y = []
-        test_data_x = []
-        test_data_y = []
+        train_data = {'x': [], 'y': []}
+        val_data = {'x': [], 'y': []}
+        test_data = {'x': [], 'y': []}
         language = filename[-11:-6]
         
         with open(filename, 'r') as file_input:
@@ -55,23 +50,23 @@ def process_jsonls(filenames):
 
         for entry in input_parse:
             if entry['partition'] == 'train':
-                train_data_x.append(entry['utt'])
-                if not saved_labels: train_data_y.append(entry['intent'])
+                train_data['x'].append(entry['utt'])
+                train_data['y'].append(entry['intent'])
             elif entry['partition'] == 'dev':
-                val_data_x.append(entry['utt'])
-                if not saved_labels: val_data_y.append(entry['intent'])
+                val_data['x'].append(entry['utt'])
+                val_data['y'].append(entry['intent'])
             else: # if entry['partition'] == 'test':
-                test_data_x.append(entry['utt'])
-                if not saved_labels: test_data_y.append(entry['intent'])
-            
-        save_data_to_file(f'{language}_train_x.json', train_data_x)
-        save_data_to_file(f'{language}_val_x.json', val_data_x)
-        save_data_to_file(f'{language}_test_x.json', test_data_x)
-        if not saved_labels:
-            save_data_to_file('train_y.json', train_data_y)
-            save_data_to_file('val_y.json', val_data_y)
-            save_data_to_file('test_y.json', test_data_y)
-            saved_labels = True
+                test_data['x'].append(entry['utt'])
+                test_data['y'].append(entry['intent'])
+
+        tmp = os.path.join(data_dir, language)
+        if not os.path.exists(tmp): os.makedirs(tmp)
+        save_data_to_file(f'{language}/train.json', train_data)
+        save_data_to_file(f'{language}/val.json', val_data)
+        save_data_to_file(f'{language}/test.json', test_data)
+
+    unique_labels = list(set(train_data['y']))
+    save_data_to_file('labels.json', unique_labels, True)
 
 
 def pad_tensor(tensor):
