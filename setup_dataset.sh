@@ -23,9 +23,6 @@ download_dataset () {
 }
 
 
-if ! [ -f $data_dir/'train.json' ] || ! [ -f $data_dir/'val.json' ] || ! [ -f $data_dir/'test.json' ]
-then
-    download_dataset pl-PL
-    python organize_data.py
-fi
+download_dataset pl-PL
+python src/organize_data.py
 
