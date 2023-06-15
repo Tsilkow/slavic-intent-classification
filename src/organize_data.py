@@ -1,7 +1,10 @@
 import os
 import simplejson as json
+import numpy as np
+import torch
 
 
+pad_token = '#'
 dataset_dir = 'dataset/'
 data_dir = 'data/'
 
@@ -69,6 +72,24 @@ def process_jsonls(filenames):
             save_data_to_file('val_y.json', val_data_y)
             save_data_to_file('test_y.json', test_data_y)
             saved_labels = True
+
+
+def pad_tensor(tensor):
+    """
+    Returns padded tensor up to the longest utterance in batch.
+
+    :tensor: batch of tensors to be padded
+    """
+    tensor_lengths = [len(utterance) for utterance in tensor]
+    longest_sent = max(tensor_lengths)
+    batch_size = len(tensor)
+    padded_tensor = np.ones((batch_size, longest_sent)) * pad_token
+
+    for i, x_len in enumerate(tensor_lengths):
+        utterance = tensor[i]
+        padded_tensor[i, 0:x_len] = utterance[:x_len]
+    
+    return padded_tensor, tensor_lengths
 
 
 if __name__ == '__main__':
