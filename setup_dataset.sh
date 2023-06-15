@@ -23,6 +23,6 @@ download_dataset () {
 }
 
 
-download_dataset pl-PL ru-RU sl-SL
+download_dataset pl-PL ro-RO ru-RU sl-SL
 python src/organize_data.py
 
