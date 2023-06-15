@@ -1,3 +1,3 @@
 # NLP-group-project
 
-Repository for code written for NLP gropu project "Intent Classification in Polish" by group GPT Ghostwriters.
+Repository for code written for NLP group project "Intent Classification in Slavic Languages" by group GPT Ghostwriters.
