@@ -2,9 +2,7 @@ import numpy as np
 import torch
 
 
-class PaddingDataloader
-
-
+pad_token='#'
 
 
 def pad_tensor(tensor):
@@ -21,8 +19,7 @@ def pad_tensor(tensor):
     for i, x_len in enumerate(tensor_lengths):
         utterance = tensor[i]
         padded_tensor[i, 0:x_len] = utterance[:x_len]
-
-    padded_tensor = torch.LongTensor(padded_tensor)
+    
     return padded_tensor, tensor_lengths
 
 
@@ -44,16 +41,3 @@ def load_into_tensors(data_parse, tokenizer, one_hot_encoder, indices):
         y_tensors.append(one_hot_encoder(data_parse['y'][i], output_values_total))
 
     return torch.stack(x_tensors), torch.stack(y_tensors)
-
-
-def create_batch()
-
-
-def create_dataloader(partition):
-    '''
-    Creates pytorch dataloader
-    
-    :partition: poriton of data to be put in dataloader; has to be 'train', 'val' or 'test'
-    '''
-    assert partition in ['train', 'val', 'test']
-    pass
