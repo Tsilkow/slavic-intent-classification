@@ -1,4 +1,7 @@
 simplejson==3.19.1
-pandas
 torch
 transformers
+sentencepiece
+pytorch_lightning
+scikit-learn
+accelerate
