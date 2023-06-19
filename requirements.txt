@@ -3,3 +3,4 @@ pandas
 torch
 transformers[pytorch]
 sentencepiece
+evaluate
