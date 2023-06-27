@@ -37,6 +37,9 @@ def process_jsonls(filenames):
 
     :filenames: list of filenames (full paths) of jsonls to process
     """
+    combined_train_data = {'x': [], 'y': []}
+    combined_val_data = {'x': [], 'y': []}
+    combined_test_data = {'x': [], 'y': []}
     for filename in filenames:
         input_parse = []
         train_data = {'x': [], 'y': []}
@@ -64,7 +67,18 @@ def process_jsonls(filenames):
         save_data_to_file(f'{language}/train.json', train_data)
         save_data_to_file(f'{language}/val.json', val_data)
         save_data_to_file(f'{language}/test.json', test_data)
+        combined_train_data['x'].extend(train_data['x'])
+        combined_val_data['x'].extend(val_data['x'])
+        combined_test_data['x'].extend(test_data['x'])
+        combined_train_data['y'].extend(train_data['y'])
+        combined_val_data['y'].extend(val_data['y'])
+        combined_test_data['y'].extend(test_data['y'])
 
+    tmp = os.path.join(data_dir, 'combined')
+    if not os.path.exists(tmp): os.makedirs(tmp)
+    save_data_to_file(f'combined/train.json', combined_train_data)
+    save_data_to_file(f'combined/val.json', combined_val_data)
+    save_data_to_file(f'combined/test.json', combined_test_data)
     unique_labels = list(set(train_data['y']))
     save_data_to_file('labels.json', unique_labels, True)
 
