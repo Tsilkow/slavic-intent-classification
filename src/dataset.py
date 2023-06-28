@@ -48,7 +48,10 @@ class MassiveDatasetBert(Dataset):
         """
         Encode inputs with tokenizer and outputs into one-hot format.
         """
-        self._inputs = self._tokenizer(data['x'], padding='longest', return_tensors='pt')
+        self._inputs = self._tokenizer(
+            data['x'],
+            max_length=128, truncation=True, padding='longest', return_tensors='pt'
+        )
         self._targets = self._one_hot_encode_labels(data['y'])
 
 
@@ -84,5 +87,11 @@ class MassiveDatasetT5(Dataset):
         """
         Encode inputs and outputs with tokenizer.
         """
-        self._inputs = self._tokenizer(data['x'], padding='longest', return_tensors='pt')
-        self._targets = self._tokenizer(data['y'], padding='longest', return_tensors='pt')
+        tokenizer_kwargs = {
+            'max_length': 128,
+            'truncation': True,
+            'padding': 'longest',
+            'return_tensors': 'pt'
+        }
+        self._inputs = self._tokenizer(data['x'], **tokenizer_kwargs)
+        self._targets = self._tokenizer(data['y'], **tokenizer_kwargs)
