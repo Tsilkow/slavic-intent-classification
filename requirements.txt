@@ -1,7 +1,9 @@
 simplejson==3.19.1
 torch
-transformers
+transformers[torch]
 sentencepiece
+sacremoses
+evaluate
 pytorch_lightning
 scikit-learn
 accelerate
