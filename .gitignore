@@ -10,3 +10,4 @@ venv/
 .out
 .log
 .DS_Store
+plots

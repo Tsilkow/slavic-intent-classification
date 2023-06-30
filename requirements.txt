@@ -7,3 +7,5 @@ evaluate
 pytorch_lightning
 scikit-learn
 accelerate
+tensorflow
+tbparse
